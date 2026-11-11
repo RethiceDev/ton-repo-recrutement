@@ -20,12 +20,13 @@ class RegistreController extends Controller
     /**
      * Valide et enregistre l'arrivée d'un candidat.
      */
-    public function store(Request $request): RedirectResponse
+   public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'nom'     => ['required', 'string', 'max:100'],
-            'prenoms' => ['required', 'string', 'max:150'],
-            'poste'   => ['required', 'string', 'max:150'],
+            'nom'       => ['required', 'string', 'max:100'],
+            'prenoms'   => ['required', 'string', 'max:150'],
+            'telephone' => ['required', 'string', 'max:20'],
+            'poste'     => ['required', 'string', 'max:150'],
         ], [
             'required' => 'Ce champ est obligatoire.',
             'max'      => 'Ce champ est trop long.',
