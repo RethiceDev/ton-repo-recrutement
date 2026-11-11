@@ -15,15 +15,14 @@ jobs:
       - name: Connexion SSH et Déploiement
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            cd /var/www/ton-repo-recrutement
-            git pull origin main
-            composer install --no-dev --optimize-autoloader
-            php artisan config:cache
-            php artisan route:cache
-            php artisan migrate --force
-            sudo chown -R www-data:www-data storage bootstrap/cache
-            sudo chmod -R 775 storage bootstrap/cache
+          - name: Connexion SSH et Déploiement
+            uses: appleboy/ssh-action@master
+            with:
+              host: ${{ secrets.SSH_HOST }}
+              username: ${{ secrets.SSH_USERNAME }}
+              password: ${{ secrets.SSH_PASSWORD }}
+              port: 22
+              script: |
+                cd /var/www/ton-repo-recrutement
+                git pull origin main
+                php artisan migrate --force
