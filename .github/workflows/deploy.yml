@@ -2,29 +2,28 @@ name: Déploiement Continu sur VPS
 
 on:
   push:
-    branches: [ main ] # Déclenché à chaque push sur la branche main
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout du code
-      uses: actions/checkout@v4
+      - name: Checkout du code
+        uses: actions/checkout@v4
 
-    - name: Connexion SSH et Déploiement
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          cd /var/www/recrutement_planetech  # <-- Remplace par le dossier exact de ton projet sur le VPS
-          git pull origin main
-          composer install --no-dev --optimize-autoloader
-          php artisan config:cache
-          php artisan route:cache
-          php artisan migrate --force
-          sudo chown -R www-data:www-data storage bootstrap/cache
-          sudo chmod -R 775 storage bootstrap/cache
+      - name: Connexion SSH et Déploiement
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /var/www/ton-repo-recrutement
+            git pull origin main
+            composer install --no-dev --optimize-autoloader
+            php artisan config:cache
+            php artisan route:cache
+            php artisan migrate --force
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
